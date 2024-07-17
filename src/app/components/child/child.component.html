@@ -1,0 +1,3 @@
+<ng-container *ngIf="mouseCoordinates$ | async as coords">
+  <div class="child">X: {{ coords.x }} Y: {{ coords.y }}</div>
+</ng-container>
