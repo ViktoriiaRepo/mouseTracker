@@ -10,6 +10,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - Uses RxJS to handle mouse movement events.
 - Optimizes DOM updates with `throttleTime` and `distinctUntilChanged` operators.
 - Stores mouse coordinates in the state using NgRx.
+- Click anywhere to toggle the tracker ON/OFF and display the current state ("Tracker ON" or "Tracker OFF").
+
+## Usage
+
+- Open the application in your browser.
+- Click anywhere on the page to toggle the mouse tracker ON/OFF.
+- When the tracker is ON, a trail will follow the cursor, and the coordinates will be displayed on the screen.
+- When the tracker is OFF, the trail and coordinates will stop updating.
 
 ## Installation and Running
 

@@ -1,4 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  OnDestroy,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { setCoordinates } from '../../state/mouse.actions';
 import { Subscription } from 'rxjs';
@@ -10,14 +15,28 @@ import { TrailService } from 'src/app/service/trail.service';
   selector: 'app-parent',
   templateUrl: './parent.component.html',
   styleUrls: ['./parent.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ParentComponent implements OnDestroy {
   private mouseMoveSubscription!: Subscription;
+  trackingEnabled = false;
 
   constructor(
     private store: Store<{ mouse: { x: number; y: number } }>,
     private trailService: TrailService
-  ) {
+  ) {}
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    this.trackingEnabled = !this.trackingEnabled;
+    if (this.trackingEnabled) {
+      this.startTracking();
+    } else {
+      this.stopTracking();
+    }
+  }
+
+  private startTracking(): void {
     this.mouseMoveSubscription = fromEvent<MouseEvent>(document, 'mousemove')
       .pipe(
         throttleTime(10),
@@ -32,9 +51,13 @@ export class ParentComponent implements OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  private stopTracking(): void {
     if (this.mouseMoveSubscription) {
       this.mouseMoveSubscription.unsubscribe();
     }
+  }
+
+  ngOnDestroy() {
+    this.stopTracking();
   }
 }
